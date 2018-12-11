@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', startGame)
  var board = {};
  board.cells=[];
  createBoard(3,3);
+ resetButton();
 
 function createBoard(row, col){
 		
@@ -23,7 +24,7 @@ function createBoard(row, col){
 
 function randomScatterMine(){
    	 for(let i=0; i<board.cells.length; i++){
-   	 	if( ( Math.floor(Math.random()*10) + 1) >4 ){
+   	 	if( ( Math.floor(Math.random()*100) + 1) >20 ){
    	 		board.cells[i].isMine = false;
    	 	}
    	 }
@@ -52,10 +53,16 @@ function checkForWin () {
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
-  for (let i=0; i<board.cells.length; i++){
-  	if (board.cells[i].isMine && board.cells[i].isMarked)
-  		lib.displayMessage("You win!"); 	
-  }
+	for (let i=0; i<board.cells.length; i++){
+    	if (board.cells[i].isMine && !board.cells[i].isMarked) {
+    		return;
+		}	
+    	if (!board.cells[i].isMine && board.cells[i].hidden){
+    		return;
+    	}
+	}
+  	lib.displayMessage("You win!"); 	
+
 }
 
 // Define this function to count the number of mines around the cell
@@ -74,5 +81,12 @@ function countSurroundingMines (cell) {
 			count+=1;
 	}
 	return count;
+}
+
+// add reset button for doing it again- I added the whole function
+function resetButton(){
+  var button=document.createElement("button");
+  button.innerHTML ="Reset";
+  
 }
 
