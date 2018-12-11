@@ -1,11 +1,46 @@
 document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
-// var board = 
+ var board = {};
+ board.cells=[];
+ createBoard(3,3);
+
+function createBoard(row, col){
+		
+	for (let i=0; i<row; i++){
+		for (let j=0; j<col; j++){
+			let cell={};
+			cell.row=i;
+			cell.col=j;
+			cell.isMine=true;
+			cell.isMarked=false;
+			cell.hidden=true;
+			board.cells.push(cell);
+		}
+	}
+	randomScatterMine();
+}
+
+function randomScatterMine(){
+   	 for(let i=0; i<board.cells.length; i++){
+   	 	if( ( Math.floor(Math.random()*10) + 1) >4 ){
+   	 		board.cells[i].isMine = false;
+   	 	}
+   	 }
+}
+
 
 function startGame () {
   // Don't remove this function call: it makes the game work!
+  for (let i=0; i<board.cells.length; i++){
+
+  	 board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
+  }
   lib.initBoard()
+  
+  document.addEventListener('click', checkForWin);
+  document.addEventListener('contextmenu', checkForWin);
+
 }
 
 // Define this function to look for a win condition:
@@ -17,6 +52,10 @@ function checkForWin () {
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
+  for (let i=0; i<board.cells.length; i++){
+  	if (board.cells[i].isMine && board.cells[i].isMarked)
+  		lib.displayMessage("You win!"); 	
+  }
 }
 
 // Define this function to count the number of mines around the cell
@@ -28,5 +67,12 @@ function checkForWin () {
 // It will return cell objects in an array. You should loop through 
 // them, counting the number of times `cell.isMine` is true.
 function countSurroundingMines (cell) {
+	var surroundingCells = lib.getSurroundingCells(cell.row, cell.col);
+	let count = 0;
+	for (let i=0;i<surroundingCells.length; i++){
+		if(surroundingCells[i].isMine)
+			count+=1;
+	}
+	return count;
 }
 
