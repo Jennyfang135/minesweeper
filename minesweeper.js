@@ -3,42 +3,51 @@ document.addEventListener('DOMContentLoaded', startGame)
 // Define your `board` object here!
  var board = {};
  board.cells=[];
- createBoard(3,3);
- resetButton();
+ createBoard(4,4);
+
 
 function createBoard(row, col){
-		
-	for (let i=0; i<row; i++){
-		for (let j=0; j<col; j++){
+	var i, j = this;
+  this.row = row;
+  this.col = col;
+
+  this.board={};
+  this.board.cells=[];	
+  
+	
+  for (i=0; i<this.row; i++){
+		for (j=0; j<this.col; j++){
 			let cell={};
 			cell.row=i;
 			cell.col=j;
 			cell.isMine=true;
 			cell.isMarked=false;
 			cell.hidden=true;
-			board.cells.push(cell);
+			this.board.cells.push(cell);
 		}
 	}
-	randomScatterMine();
+	this.randomScatterMine();
+  return this;
 }
 
 function randomScatterMine(){
-   	 for(let i=0; i<board.cells.length; i++){
+   	for(let i=0; i<this.board.cells.length; i++){
    	 	if( ( Math.floor(Math.random()*100) + 1) >20 ){
-   	 		board.cells[i].isMine = false;
+   	 		this.board.cells[i].isMine = false;
    	 	}
-   	 }
+   	}
 }
 
 
 function startGame () {
+
   // Don't remove this function call: it makes the game work!
   for (let i=0; i<board.cells.length; i++){
 
   	 board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
   }
-  lib.initBoard()
-  
+  lib.initBoard();
+ 
   document.addEventListener('click', checkForWin);
   document.addEventListener('contextmenu', checkForWin);
 
@@ -49,7 +58,7 @@ function startGame () {
 // 1. Are all of the cells that are NOT mines visible?
 // 2. Are all of the mines marked?
 function checkForWin () {
-
+   //mySound= sound("applause.mp3");
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
@@ -61,7 +70,10 @@ function checkForWin () {
     		return;
     	}
 	}
-  	lib.displayMessage("You win!"); 	
+	//mySound = sound("applause.mp3");
+  	lib.displayMessage("You win!"); 
+  	 var audio = new Audio("applause.mp3");
+    audio.play();
 
 }
 
@@ -83,10 +95,5 @@ function countSurroundingMines (cell) {
 	return count;
 }
 
-// add reset button for doing it again- I added the whole function
-function resetButton(){
-  var button=document.createElement("button");
-  button.innerHTML ="Reset";
-  
-}
+
 
