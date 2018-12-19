@@ -1,53 +1,48 @@
 document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
- var board = {};
- board.cells=[];
- createBoard(4,4);
-
+var board = {};
+board.cells=[];
+createBoard(4,4);
 
 function createBoard(row, col){
-	var i, j = this;
+  var i, j = this;
   this.row = row;
   this.col = col;
-
   this.board={};
-  this.board.cells=[];	
-  
-	
+  this.board.cells=[];		
   for (i=0; i<this.row; i++){
 		for (j=0; j<this.col; j++){
-			let cell={};
-			cell.row=i;
-			cell.col=j;
-			cell.isMine=true;
-			cell.isMarked=false;
-			cell.hidden=true;
-			this.board.cells.push(cell);
+		  let cell={};
+	    cell.row=i;
+	    cell.col=j;
+      cell.isMine=true;
+	    cell.isMarked=false;
+      cell.hidden=true;
+      this.board.cells.push(cell);
 		}
-	}
-	this.randomScatterMine();
+  }
+  this.randomScatterMine();
   return this;
 }
 
 function randomScatterMine(){
-   	for(let i=0; i<this.board.cells.length; i++){
-   	 	if( ( Math.floor(Math.random()*100) + 1) >20 ){
-   	 		this.board.cells[i].isMine = false;
-   	 	}
+  for(let i=0; i<this.board.cells.length; i++){
+   	if( ( Math.floor(Math.random()*100) + 1) >20 ){
+   	 	this.board.cells[i].isMine = false;
    	}
+  }
 }
 
 
 function startGame () {
 
-  // Don't remove this function call: it makes the game work!
+// Don't remove this function call: it makes the game work!
   for (let i=0; i<board.cells.length; i++){
 
-  	 board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
+    board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
   }
-  lib.initBoard();
- 
+  lib.initBoard(); 
   document.addEventListener('click', checkForWin);
   document.addEventListener('contextmenu', checkForWin);
 
@@ -63,18 +58,17 @@ function checkForWin () {
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
 	for (let i=0; i<board.cells.length; i++){
-    	if (board.cells[i].isMine && !board.cells[i].isMarked) {
-    		return;
+    if (board.cells[i].isMine && !board.cells[i].isMarked) {
+    	return;
 		}	
-    	if (!board.cells[i].isMine && board.cells[i].hidden){
-    		return;
-    	}
+    if (!board.cells[i].isMine && board.cells[i].hidden){
+    	return;
+    }
 	}
 	//mySound = sound("applause.mp3");
-  	lib.displayMessage("You win!"); 
-  	 var audio = new Audio("applause.mp3");
-    audio.play();
-
+  lib.displayMessage("You win!"); 
+  var audio = new Audio("applause.mp3");
+  audio.play();
 }
 
 // Define this function to count the number of mines around the cell
